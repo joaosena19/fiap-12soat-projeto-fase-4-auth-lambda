@@ -1,9 +1,9 @@
-# Data source para obter informações do banco
-data "terraform_remote_state" "banco" {
+# Data source para obter informações do banco de Cadastros (que contém usuarios, roles, clientes)
+data "terraform_remote_state" "cadastro_db" {
   backend = "s3"
   config = {
     bucket = var.banco_terraform_state_bucket
-    key    = "database-postgres/terraform.tfstate"
+    key    = "fase4/cadastro-database/terraform.tfstate"
     region = var.aws_region
   }
 }
@@ -77,10 +77,10 @@ resource "aws_lambda_function" "login" {
       Jwt__Key                     = var.jwt_key
       Jwt__Issuer                  = var.jwt_issuer
       Jwt__Audience                = var.jwt_audience
-      DatabaseConnection__Host     = data.terraform_remote_state.banco.outputs.postgres_instance_endpoint
-      DatabaseConnection__Port     = tostring(data.terraform_remote_state.banco.outputs.postgres_instance_port)
-      DatabaseConnection__DatabaseName = data.terraform_remote_state.banco.outputs.postgres_database_name
-      DatabaseConnection__User     = data.terraform_remote_state.banco.outputs.postgres_master_username
+      DatabaseConnection__Host     = data.terraform_remote_state.cadastro_db.outputs.db_instance_address
+      DatabaseConnection__Port     = tostring(data.terraform_remote_state.cadastro_db.outputs.db_instance_port)
+      DatabaseConnection__DatabaseName = data.terraform_remote_state.cadastro_db.outputs.db_name
+      DatabaseConnection__User     = data.terraform_remote_state.cadastro_db.outputs.db_username
       DatabaseConnection__Password = var.db_password
       
       # New Relic Configuration
