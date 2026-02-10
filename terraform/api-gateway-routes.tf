@@ -7,7 +7,7 @@ resource "aws_apigatewayv2_route" "auth_post" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /auth/authenticate"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_login.id}"
-  
+
   depends_on = [aws_apigatewayv2_integration.lambda_login]
 }
 
@@ -16,8 +16,44 @@ resource "aws_apigatewayv2_route" "webhook_post" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /webhook"
   target    = "integrations/${aws_apigatewayv2_integration.lambda_login.id}"
-  
+
   depends_on = [aws_apigatewayv2_integration.lambda_login]
+}
+
+# Rota pública - Busca de ordem de serviço sem autenticação
+resource "aws_apigatewayv2_route" "ordens_servico_busca_publica" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "POST /api/ordens-servico/busca-publica"
+  target    = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
+
+  depends_on = [aws_apigatewayv2_integration.ordemservico]
+}
+
+# Rota pública - Webhook para aprovar orçamento
+resource "aws_apigatewayv2_route" "ordens_servico_webhook_aprovar" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "POST /api/ordens-servico/orcamento/aprovar/webhook"
+  target    = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
+
+  depends_on = [aws_apigatewayv2_integration.ordemservico]
+}
+
+# Rota pública - Webhook para desaprovar orçamento
+resource "aws_apigatewayv2_route" "ordens_servico_webhook_desaprovar" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "POST /api/ordens-servico/orcamento/desaprovar/webhook"
+  target    = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
+
+  depends_on = [aws_apigatewayv2_integration.ordemservico]
+}
+
+# Rota pública - Webhook para alterar status
+resource "aws_apigatewayv2_route" "ordens_servico_webhook_status" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "POST /api/ordens-servico/status/webhook"
+  target    = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
+
+  depends_on = [aws_apigatewayv2_integration.ordemservico]
 }
 
 # ============================================================================
@@ -31,7 +67,7 @@ resource "aws_apigatewayv2_route" "clientes" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -44,7 +80,7 @@ resource "aws_apigatewayv2_route" "clientes_root" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -58,7 +94,7 @@ resource "aws_apigatewayv2_route" "veiculos" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -71,7 +107,7 @@ resource "aws_apigatewayv2_route" "veiculos_root" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -85,7 +121,7 @@ resource "aws_apigatewayv2_route" "servicos" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -98,7 +134,7 @@ resource "aws_apigatewayv2_route" "servicos_root" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -112,7 +148,7 @@ resource "aws_apigatewayv2_route" "usuarios" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -125,7 +161,7 @@ resource "aws_apigatewayv2_route" "usuarios_root" {
   target             = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.cadastro,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -143,7 +179,7 @@ resource "aws_apigatewayv2_route" "estoque" {
   target             = "integrations/${aws_apigatewayv2_integration.estoque.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.estoque,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -156,7 +192,7 @@ resource "aws_apigatewayv2_route" "estoque_root" {
   target             = "integrations/${aws_apigatewayv2_integration.estoque.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.estoque,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -174,7 +210,7 @@ resource "aws_apigatewayv2_route" "ordens_servico" {
   target             = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.ordemservico,
     aws_apigatewayv2_authorizer.lambda_auth
@@ -187,7 +223,7 @@ resource "aws_apigatewayv2_route" "ordens_servico_root" {
   target             = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.lambda_auth.id
-  
+
   depends_on = [
     aws_apigatewayv2_integration.ordemservico,
     aws_apigatewayv2_authorizer.lambda_auth

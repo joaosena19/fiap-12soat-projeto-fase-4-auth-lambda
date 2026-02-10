@@ -74,15 +74,15 @@ resource "aws_lambda_function" "login" {
 
   environment {
     variables = {
-      Jwt__Key                     = var.jwt_key
-      Jwt__Issuer                  = var.jwt_issuer
-      Jwt__Audience                = var.jwt_audience
-      DatabaseConnection__Host     = data.terraform_remote_state.cadastro_db.outputs.db_instance_address
-      DatabaseConnection__Port     = tostring(data.terraform_remote_state.cadastro_db.outputs.db_instance_port)
+      Jwt__Key                         = var.jwt_key
+      Jwt__Issuer                      = var.jwt_issuer
+      Jwt__Audience                    = var.jwt_audience
+      DatabaseConnection__Host         = data.terraform_remote_state.cadastro_db.outputs.db_instance_address
+      DatabaseConnection__Port         = tostring(data.terraform_remote_state.cadastro_db.outputs.db_instance_port)
       DatabaseConnection__DatabaseName = data.terraform_remote_state.cadastro_db.outputs.db_name
-      DatabaseConnection__User     = data.terraform_remote_state.cadastro_db.outputs.db_username
-      DatabaseConnection__Password = var.db_password
-      
+      DatabaseConnection__User         = data.terraform_remote_state.cadastro_db.outputs.db_username
+      DatabaseConnection__Password     = var.db_password
+
       # New Relic Configuration
       NEW_RELIC_ACCOUNT_ID                   = var.new_relic_account_id
       NEW_RELIC_LICENSE_KEY                  = var.new_relic_license_key
@@ -119,7 +119,7 @@ resource "aws_lambda_function" "authorizer" {
       Jwt__Key      = var.jwt_key
       Jwt__Issuer   = var.jwt_issuer
       Jwt__Audience = var.jwt_audience
-      
+
       # New Relic Configuration
       NEW_RELIC_ACCOUNT_ID                   = var.new_relic_account_id
       NEW_RELIC_LICENSE_KEY                  = var.new_relic_license_key

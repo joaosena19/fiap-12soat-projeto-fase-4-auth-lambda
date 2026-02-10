@@ -12,7 +12,7 @@ data "terraform_remote_state" "infra" {
 resource "aws_apigatewayv2_api" "main" {
   name          = "${var.project_identifier}-api-gateway"
   protocol_type = "HTTP"
-  description   = "API Gateway para roteamento entre Lambda (auth) e EKS (aplicação)"
+  description   = "API Gateway para roteamento entre Lambda (auth) e microserviços (cadastro, estoque, ordem-servico)"
 
   cors_configuration {
     allow_origins  = ["*"]
