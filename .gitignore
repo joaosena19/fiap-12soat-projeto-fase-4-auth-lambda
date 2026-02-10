@@ -81,3 +81,8 @@ Thumbs.db
 **/v18/*
 **/CopilotIndices/
 .vs/
+
+# Test reports and scripts
+**/Tests/Report/
+**/generate-test-reports.bat
+**/generate-test-reports.ps1

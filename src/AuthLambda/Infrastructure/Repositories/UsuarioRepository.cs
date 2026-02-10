@@ -1,37 +1,22 @@
 using Dapper;
+using Infrastructure.Database;
 using Infrastructure.Database.Models;
 using Infrastructure.Gateways.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using System.Data.Common;
 
 namespace Infrastructure.Repositories
 {
     public class UsuarioRepository : IUsuarioGateway
     {
-        private readonly string _connectionString;
+        private readonly IDbConnectionFactory _connectionFactory;
+        private readonly IDapperExecutor _dapperExecutor;
 
-        public UsuarioRepository(string connectionString)
+        public UsuarioRepository(IDbConnectionFactory connectionFactory, IDapperExecutor dapperExecutor)
         {
-            _connectionString = connectionString;
-        }
-
-        public UsuarioRepository(IConfiguration configuration)
-        {
-            var host = configuration["DatabaseConnection:Host"];
-            var port = configuration["DatabaseConnection:Port"];
-            var database = configuration["DatabaseConnection:DatabaseName"];
-            var username = configuration["DatabaseConnection:User"];
-            var password = configuration["DatabaseConnection:Password"];
-
-            if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(port) || string.IsNullOrEmpty(database) || string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                throw new InvalidOperationException(
-                    $"Configuração de banco de dados incompleta. " +
-                    $"Host: {host}, Port: {port}, Database: {database}, User: {username}, " +
-                    $"Password: {(string.IsNullOrEmpty(password) ? "VAZIO" : "DEFINIDO")}");
-            }
-
-            _connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};";
+            _connectionFactory = connectionFactory;
+            _dapperExecutor = dapperExecutor;
         }
 
         public async Task<UsuarioModel?> ObterUsuarioAtivoAsync(string documentoIdentificador)
@@ -56,21 +41,21 @@ namespace Infrastructure.Repositories
                 WHERE u.documento_identificador = @documentoIdentificador
                 AND u.status = 'ativo'";
 
-            using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
+            await using var connection = await _connectionFactory.CreateOpenConnectionAsync();
 
             // Buscar dados do usuário
-            var usuario = await connection.QuerySingleOrDefaultAsync<UsuarioModel>(query, new { documentoIdentificador });
+            var usuario = await _dapperExecutor.QuerySingleOrDefaultAsync<UsuarioModel>(connection, query, new { documentoIdentificador });
             
             if (usuario == null)
                 return null;
 
             // Buscar roles do usuário
-            var roles = await connection.QueryAsync<int>(rolesQuery, new { documentoIdentificador });
+            var roles = await _dapperExecutor.QueryAsync<int>(connection, rolesQuery, new { documentoIdentificador });
             usuario.Roles = roles.Select(r => r switch
             {
                 1 => "Administrador",
                 2 => "Cliente",
+                3 => "Sistema",
                 _ => "Unknown"
             }).ToList();
 

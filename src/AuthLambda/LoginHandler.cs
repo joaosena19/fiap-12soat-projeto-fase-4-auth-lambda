@@ -2,6 +2,7 @@ using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Infrastructure.Authentication;
 using Infrastructure.Authentication.PasswordHashing;
+using Infrastructure.Database;
 using Infrastructure.Gateways.Interfaces;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -37,11 +38,25 @@ public class LoginHandler
         _authenticationService = serviceProvider.GetRequiredService<IAuthenticationService>();
     }
 
+    // Construtor alternativo para testes
+    public LoginHandler(IAuthenticationService authenticationService, IConfiguration configuration)
+    {
+        _authenticationService = authenticationService;
+        _configuration = configuration;
+    }
+
     private void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton(_configuration);
         services.AddSingleton<ITokenService, TokenService>();
-        services.AddSingleton<IUsuarioGateway, UsuarioRepository>();
+        services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
+        services.AddSingleton<IDapperExecutor, DapperExecutor>();
+        services.AddSingleton<IUsuarioGateway>(provider =>
+        {
+            var connectionFactory = provider.GetRequiredService<IDbConnectionFactory>();
+            var dapperExecutor = provider.GetRequiredService<IDapperExecutor>();
+            return new UsuarioRepository(connectionFactory, dapperExecutor);
+        });
         
         // Configurar Argon2HashingOptions a partir do appsettings
         services.Configure<Argon2HashingOptions>(_configuration.GetSection("Argon2HashingOptions"));
@@ -66,10 +81,18 @@ public class LoginHandler
             }
 
             // Deserializar o body JSON
-            var tokenRequest = JsonSerializer.Deserialize<TokenRequestDto>(request.Body, new JsonSerializerOptions
+            TokenRequestDto? tokenRequest;
+            try
             {
-                PropertyNameCaseInsensitive = true
-            });
+                tokenRequest = JsonSerializer.Deserialize<TokenRequestDto>(request.Body, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch (JsonException)
+            {
+                return CreateErrorResponse(400, "Request inválido");
+            }
 
             context.Logger.LogInformation($"Documento recebido: {tokenRequest?.DocumentoIdentificadorUsuario}");
 
