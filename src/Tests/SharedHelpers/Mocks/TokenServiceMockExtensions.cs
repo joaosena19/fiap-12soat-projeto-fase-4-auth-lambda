@@ -26,6 +26,14 @@ public static class TokenServiceMockExtensions
             return this;
         }
 
+        public TokenServiceBuilder RetornaComCallback(string token, Action<string, Guid?, List<string>> callback)
+        {
+            _mock.Setup(x => x.GenerateToken(It.IsAny<string>(), It.IsAny<Guid?>(), It.IsAny<List<string>>()))
+                .Returns(token)
+                .Callback(callback);
+            return this;
+        }
+
         public TokenServiceBuilder ComCallback(Action<string, Guid?, List<string>> callback)
         {
             _mock.Setup(x => x.GenerateToken(It.IsAny<string>(), It.IsAny<Guid?>(), It.IsAny<List<string>>()))

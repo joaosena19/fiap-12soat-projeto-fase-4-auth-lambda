@@ -4,13 +4,13 @@ using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Tests.SharedHelpers.Builders;
-using Xunit;
 
 namespace Tests.Unit.Authentication;
 
 public class TokenServiceTest
 {
     [Fact(DisplayName = "Deve lançar InvalidOperationException quando Jwt:Key estiver ausente")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveLancarInvalidOperationException_QuandoJwtKeyEstiverAusente()
     {
         // Arrange
@@ -34,6 +34,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Deve lançar InvalidOperationException quando Jwt:Issuer estiver ausente")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveLancarInvalidOperationException_QuandoJwtIssuerEstiverAusente()
     {
         // Arrange
@@ -57,6 +58,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Deve lançar InvalidOperationException quando Jwt:Audience estiver ausente")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveLancarInvalidOperationException_QuandoJwtAudienceEstiverAusente()
     {
         // Arrange
@@ -80,6 +82,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Deve gerar JWT com claims sub e userId")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveGerarJwtComSubEUserId()
     {
         // Arrange
@@ -97,6 +100,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Deve incluir clienteId quando for informado")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveIncluirClienteId_QuandoForInformado()
     {
         // Arrange
@@ -114,6 +118,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Não deve incluir clienteId quando for nulo")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_NaoDeveIncluirClienteId_QuandoForNulo()
     {
         // Arrange
@@ -130,6 +135,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Deve incluir roles como claims")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveIncluirRolesComoClaims()
     {
         // Arrange
@@ -148,6 +154,7 @@ public class TokenServiceTest
     }
 
     [Fact(DisplayName = "Deve expirar em aproximadamente uma hora")]
+    [Trait("Service", "TokenService")]
     public void GenerateToken_DeveExpirarEmAproximadamenteUmaHora()
     {
         // Arrange

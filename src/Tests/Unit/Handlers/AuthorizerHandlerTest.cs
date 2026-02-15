@@ -7,14 +7,12 @@ using System.Security.Claims;
 using System.Text;
 using Tests.SharedHelpers.Builders;
 using Tests.SharedHelpers.Lambda;
-using Xunit;
 
 namespace Tests.Unit.Handlers;
 
 public class AuthorizerHandlerTest
 {
     [Fact(DisplayName = "FunctionHandler deve retornar não autorizado quando header Authorization estiver ausente")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveRetornarNaoAutorizado_QuandoHeaderAuthorizationEstiverAusente()
     {
@@ -36,7 +34,6 @@ public class AuthorizerHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar não autorizado quando header Authorization estiver vazio")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveRetornarNaoAutorizado_QuandoHeaderAuthorizationEstiverVazio()
     {
@@ -59,7 +56,6 @@ public class AuthorizerHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve aceitar header Authorization com Bearer repetido e validar token")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveAceitarHeaderAuthorizationComBearerRepetido_EValidarToken()
     {
@@ -91,7 +87,6 @@ public class AuthorizerHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve ler header Authorization com chave lowercase ou uppercase")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveLerHeaderAuthorization_ComChaveLowercaseOuUppercase()
     {
@@ -132,7 +127,6 @@ public class AuthorizerHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar não autorizado quando token for inválido ou expirado")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveRetornarNaoAutorizado_QuandoTokenForInvalidoOuExpirado()
     {
@@ -158,7 +152,6 @@ public class AuthorizerHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar autorizado com contexto sub e role quando token for válido")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveRetornarAutorizado_ComContextoSubERole_QuandoTokenForValido()
     {
@@ -191,7 +184,6 @@ public class AuthorizerHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar não autorizado quando configuração JWT estiver incompleta")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "AuthorizerHandler")]
     public void FunctionHandler_DeveRetornarNaoAutorizado_QuandoConfiguracaoJwtEstiverIncompleta()
     {

@@ -1,33 +1,20 @@
 using System.Text.Json;
 using Amazon.Lambda.APIGatewayEvents;
-using AuthLambda;
 using FluentAssertions;
 using Infrastructure.Authentication;
-using Microsoft.Extensions.Configuration;
-using Moq;
 using Shared.Enums;
 using Tests.SharedHelpers.Builders;
+using Tests.SharedHelpers.Fixtures;
 using Tests.SharedHelpers.Lambda;
 using Tests.SharedHelpers.Mocks;
-using Xunit;
 
 namespace Tests.Unit.Handlers;
 
 public class LoginHandlerTest
 {
-    private readonly Mock<IAuthenticationService> _authServiceMock;
-    private readonly Mock<IConfiguration> _configurationMock;
-    private readonly LoginHandler _handler;
-
-    public LoginHandlerTest()
-    {
-        _authServiceMock = new Mock<IAuthenticationService>();
-        _configurationMock = new Mock<IConfiguration>();
-        _handler = new LoginHandler(_authServiceMock.Object, _configurationMock.Object);
-    }
+    private readonly LoginHandlerTestFixture _fixture = new();
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando Body for nulo")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar400_QuandoBodyForNulo()
     {
@@ -38,7 +25,7 @@ public class LoginHandlerTest
         var context = LambdaContextBuilder.Criar();
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(400);
@@ -51,7 +38,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando JSON do Body for inválido")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar400_QuandoJsonDoBodyForInvalido()
     {
@@ -63,7 +49,7 @@ public class LoginHandlerTest
         var context = LambdaContextBuilder.Criar();
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(400);
@@ -76,7 +62,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando TokenRequestDto não for desserializável")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar400_QuandoTokenRequestDtoNaoForDesserializavel()
     {
@@ -88,7 +73,7 @@ public class LoginHandlerTest
         var context = LambdaContextBuilder.Criar();
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(400);
@@ -101,7 +86,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 401 quando AuthenticationService lançar Unauthorized")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar401_QuandoAuthenticationServiceLancarUnauthorized()
     {
@@ -117,13 +101,13 @@ public class LoginHandlerTest
         
         var context = LambdaContextBuilder.Criar();
 
-        _authServiceMock
+        _fixture.AuthenticationServiceMock
             .AoValidarCredenciais()
             .ComRequest(tokenRequest)
             .LancaDomainException(ErrorType.Unauthorized, "Credenciais inválidas");
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(401);
@@ -136,7 +120,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando AuthenticationService lançar InvalidInput")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar400_QuandoAuthenticationServiceLancarInvalidInput()
     {
@@ -152,13 +135,13 @@ public class LoginHandlerTest
         
         var context = LambdaContextBuilder.Criar();
 
-        _authServiceMock
+        _fixture.AuthenticationServiceMock
             .AoValidarCredenciais()
             .ComRequest(tokenRequest)
             .LancaDomainException(ErrorType.InvalidInput, "Documento identificador e senha são obrigatórios.");
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(400);
@@ -171,7 +154,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 500 quando ocorrer exceção inesperada")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar500_QuandoOcorrerExcecaoInesperada()
     {
@@ -187,13 +169,13 @@ public class LoginHandlerTest
         
         var context = LambdaContextBuilder.Criar();
 
-        _authServiceMock
+        _fixture.AuthenticationServiceMock
             .AoValidarCredenciais()
             .ComRequest(tokenRequest)
             .LancaExcecao(new InvalidOperationException("Erro inesperado"));
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(500);
@@ -206,7 +188,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 200 com TokenResponseDto quando sucesso")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar200_ComTokenResponseDto_QuandoSucesso()
     {
@@ -228,13 +209,13 @@ public class LoginHandlerTest
         
         var context = LambdaContextBuilder.Criar();
 
-        _authServiceMock
+        _fixture.AuthenticationServiceMock
             .AoValidarCredenciais()
             .ComRequest(tokenRequest)
             .Retorna(tokenResponse);
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(200);
@@ -252,7 +233,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "Deve construir LoginHandler com construtor padrão e inicializar DI")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public void DeveConstruirLoginHandlerComConstrutorPadraoEInicializarDI()
     {
@@ -263,7 +243,7 @@ public class LoginHandlerTest
             Directory.SetCurrentDirectory(AppContext.BaseDirectory);
 
             // Act
-            var handler = new LoginHandler();
+            var handler = new AuthLambda.LoginHandler();
 
             // Assert
             handler.Should().NotBeNull();
@@ -275,7 +255,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando Body deserializar para null")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar400_QuandoBodyDeserializarParaNull()
     {
@@ -287,7 +266,7 @@ public class LoginHandlerTest
         var context = LambdaContextBuilder.Criar();
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(400);
@@ -300,7 +279,6 @@ public class LoginHandlerTest
     }
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando Request for null")]
-    [Trait("Category", "Unit")]
     [Trait("Handler", "LoginHandler")]
     public async Task FunctionHandler_DeveRetornar400_QuandoRequestForNull()
     {
@@ -309,7 +287,7 @@ public class LoginHandlerTest
         var context = LambdaContextBuilder.Criar();
 
         // Act
-        var response = await _handler.FunctionHandler(request, context);
+        var response = await _fixture.LoginHandler.FunctionHandler(request, context);
 
         // Assert
         response.StatusCode.Should().Be(400);

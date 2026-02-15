@@ -3,13 +3,13 @@ using Infrastructure.Authentication.PasswordHashing;
 using Konscious.Security.Cryptography;
 using System.Security.Cryptography;
 using System.Text;
-using Xunit;
 
 namespace Tests.Unit.Authentication;
 
 public class PasswordHasherTest
 {
     [Fact(DisplayName = "Deve retornar false quando password for vazio")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoPasswordForVazio()
     {
         // Arrange
@@ -32,6 +32,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar false quando password for nulo")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoPasswordForNulo()
     {
         // Arrange
@@ -54,6 +55,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar false quando hash for vazio")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoHashForVazio()
     {
         // Arrange
@@ -76,6 +78,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar false quando hash for nulo")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoHashForNulo()
     {
         // Arrange
@@ -98,6 +101,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar false quando hash não for base64 válido")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoHashNaoForBase64Valido()
     {
         // Arrange
@@ -121,6 +125,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar false quando tamanho do hash for inválido")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoTamanhoDoHashForInvalido()
     {
         // Arrange
@@ -147,6 +152,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar true quando password e hash forem válidos")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarTrue_QuandoPasswordEHashForemValidos()
     {
         // Arrange
@@ -192,6 +198,7 @@ public class PasswordHasherTest
     }
 
     [Fact(DisplayName = "Deve retornar false quando password for incorreto")]
+    [Trait("Service", "PasswordHasher")]
     public void Verify_DeveRetornarFalse_QuandoPasswordForIncorreto()
     {
         // Arrange
