@@ -1,13 +1,3 @@
-# Data source para obter informações da infraestrutura (VPC, NLB, etc.)
-data "terraform_remote_state" "infra" {
-  backend = "s3"
-  config = {
-    bucket = var.infra_terraform_state_bucket
-    key    = "infra/terraform.tfstate"
-    region = var.aws_region
-  }
-}
-
 # API Gateway HTTP API
 resource "aws_apigatewayv2_api" "main" {
   name          = "${var.project_identifier}-api-gateway"
@@ -160,45 +150,4 @@ resource "aws_apigatewayv2_authorizer" "lambda_auth" {
   authorizer_result_ttl_in_seconds  = 300
   identity_sources                  = ["$request.header.Authorization"]
   enable_simple_responses           = true
-}
-
-# Security Group para VPC Link
-resource "aws_security_group" "vpc_link_sg" {
-  name        = "${var.project_identifier}-vpc-link-sg"
-  description = "Security group para VPC Link do API Gateway"
-  vpc_id      = data.terraform_remote_state.infra.outputs.vpc_principal_id
-
-  egress {
-    description = "Permitir todo trafego de saida"
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "${var.project_identifier}-vpc-link-sg"
-  }
-}
-
-# VPC Link para conectar API Gateway ao NLB privado
-resource "aws_apigatewayv2_vpc_link" "eks" {
-  name               = "${var.project_identifier}-vpc-link"
-  security_group_ids = [aws_security_group.vpc_link_sg.id]
-  subnet_ids         = data.terraform_remote_state.infra.outputs.subnet_publica_ids
-
-  tags = {
-    Name = "${var.project_identifier}-vpc-link"
-  }
-}
-
-# Integração com EKS via VPC Link/NLB
-resource "aws_apigatewayv2_integration" "eks" {
-  api_id                 = aws_apigatewayv2_api.main.id
-  integration_type       = "HTTP_PROXY"
-  integration_uri        = data.terraform_remote_state.infra.outputs.nlb_listener_arn
-  integration_method     = "ANY"
-  connection_type        = "VPC_LINK"
-  connection_id          = aws_apigatewayv2_vpc_link.eks.id
-  payload_format_version = "1.0"
 }

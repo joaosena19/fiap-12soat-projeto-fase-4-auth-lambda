@@ -50,14 +50,14 @@ variable "jwt_audience" {
 variable "infra_terraform_state_bucket" {
   description = "Nome do bucket S3 onde está o state da infraestrutura"
   type        = string
-  default     = "fiap-12soat-fase3-joao-dainese"
+  default     = "fiap-12soat-fase4-joao-dainese"
 }
 
 # Variáveis para remote state do banco
 variable "banco_terraform_state_bucket" {
   description = "Nome do bucket S3 onde está o state do banco"
   type        = string
-  default     = "fiap-12soat-fase3-joao-dainese"
+  default     = "fiap-12soat-fase4-joao-dainese"
 }
 
 # Senha do banco (passada via workflow)

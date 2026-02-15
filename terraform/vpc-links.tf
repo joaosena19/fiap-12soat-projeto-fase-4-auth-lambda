@@ -52,11 +52,11 @@ resource "aws_apigatewayv2_vpc_link" "cadastro" {
   }
 }
 
-# Integração API Gateway → Cadastro Target Group
+# Integração API Gateway → Cadastro Listener
 resource "aws_apigatewayv2_integration" "cadastro" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "HTTP_PROXY"
-  integration_uri        = data.terraform_remote_state.infra.outputs.cadastro_target_group_arn
+  integration_uri        = data.terraform_remote_state.infra.outputs.cadastro_listener_arn
   integration_method     = "ANY"
   connection_type        = "VPC_LINK"
   connection_id          = aws_apigatewayv2_vpc_link.cadastro.id
@@ -78,11 +78,11 @@ resource "aws_apigatewayv2_vpc_link" "estoque" {
   }
 }
 
-# Integração API Gateway → Estoque Target Group
+# Integração API Gateway → Estoque Listener
 resource "aws_apigatewayv2_integration" "estoque" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "HTTP_PROXY"
-  integration_uri        = data.terraform_remote_state.infra.outputs.estoque_target_group_arn
+  integration_uri        = data.terraform_remote_state.infra.outputs.estoque_listener_arn
   integration_method     = "ANY"
   connection_type        = "VPC_LINK"
   connection_id          = aws_apigatewayv2_vpc_link.estoque.id
@@ -104,38 +104,13 @@ resource "aws_apigatewayv2_vpc_link" "ordemservico" {
   }
 }
 
-# Integração API Gateway → OrdemServico Target Group
+# Integração API Gateway → OrdemServico Listener
 resource "aws_apigatewayv2_integration" "ordemservico" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "HTTP_PROXY"
-  integration_uri        = data.terraform_remote_state.infra.outputs.ordemservico_target_group_arn
+  integration_uri        = data.terraform_remote_state.infra.outputs.ordemservico_listener_arn
   integration_method     = "ANY"
   connection_type        = "VPC_LINK"
   connection_id          = aws_apigatewayv2_vpc_link.ordemservico.id
-  payload_format_version = "1.0"
-}
-
-# ============================================================================
-# VPC LINK - Legacy (mantido por compatibilidade)
-# ============================================================================
-
-resource "aws_apigatewayv2_vpc_link" "eks" {
-  name               = "${var.project_identifier}-vpc-link"
-  security_group_ids = [aws_security_group.vpc_link_sg.id]
-  subnet_ids         = data.terraform_remote_state.infra.outputs.subnet_publica_ids
-
-  tags = {
-    Name = "${var.project_identifier}-vpc-link-legacy"
-  }
-}
-
-# Integração API Gateway → Legacy Target Group
-resource "aws_apigatewayv2_integration" "eks" {
-  api_id                 = aws_apigatewayv2_api.main.id
-  integration_type       = "HTTP_PROXY"
-  integration_uri        = data.terraform_remote_state.infra.outputs.nlb_listener_arn
-  integration_method     = "ANY"
-  connection_type        = "VPC_LINK"
-  connection_id          = aws_apigatewayv2_vpc_link.eks.id
   payload_format_version = "1.0"
 }
