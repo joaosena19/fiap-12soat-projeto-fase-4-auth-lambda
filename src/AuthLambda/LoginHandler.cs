@@ -18,6 +18,7 @@ namespace AuthLambda;
 
 public class LoginHandler
 {
+    private static readonly JsonSerializerOptions JsonSerializerOptions = new() { PropertyNameCaseInsensitive = true };
     private readonly IAuthenticationService _authenticationService;
     private readonly IConfiguration _configuration;
 
@@ -84,10 +85,7 @@ public class LoginHandler
             TokenRequestDto? tokenRequest;
             try
             {
-                tokenRequest = JsonSerializer.Deserialize<TokenRequestDto>(request.Body, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                tokenRequest = JsonSerializer.Deserialize<TokenRequestDto>(request.Body, JsonSerializerOptions);
             }
             catch (JsonException)
             {
