@@ -40,6 +40,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Verificar conectividade com AWS
+        run: |
+          aws sts get-caller-identity
+          echo "✅ Conectividade com AWS verificada"
+
       - name: Buscar dados do PostgreSQL via Terraform State
         run: |
           # Instalar jq se não estiver disponível
