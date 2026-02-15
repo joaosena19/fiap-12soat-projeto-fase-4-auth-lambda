@@ -86,3 +86,12 @@ Thumbs.db
 **/Tests/Report/
 **/generate-test-reports.bat
 **/generate-test-reports.ps1
+
+# Copilot instructions
+.github/copilot-instructions.md
+
+# Agents instructions
+AGENTS.md
+
+# Atlas/Conductor agent plans
+plans/
