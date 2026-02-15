@@ -48,14 +48,14 @@ jobs:
           # Buscar dados do PostgreSQL diretamente do S3 backend (read-only)
           export AWS_REGION="${{ env.AWS_REGION }}"
           
-          # Buscar outputs diretamente do state via AWS CLI
-          STATE_DATA=$(aws s3 cp s3://${{ secrets.TF_VAR_BUCKET_NAME }}/database-postgres/terraform.tfstate -)
+          # Buscar outputs diretamente do state via AWS CLI (Cadastro DB - usado pelo Lambda de autenticação)
+          STATE_DATA=$(aws s3 cp s3://${{ secrets.TF_VAR_BUCKET_NAME }}/fase4/cadastro-database/terraform.tfstate -)
           
           # Extrair valores usando jq  
-          export DB_HOST_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.postgres_instance_endpoint.value')
-          export DB_PORT_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.postgres_instance_port.value // 5432')
-          export DB_NAME_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.postgres_database_name.value') 
-          export DB_USERNAME_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.postgres_master_username.value')
+          export DB_HOST_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.db_instance_address.value')
+          export DB_PORT_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.db_instance_port.value // "5432"')
+          export DB_NAME_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.db_name.value') 
+          export DB_USERNAME_VALUE=$(echo "$STATE_DATA" | jq -r '.outputs.db_username.value')
           
           # Validar se os valores foram obtidos
           if [ "$DB_HOST_VALUE" = "null" ] || [ -z "$DB_HOST_VALUE" ]; then

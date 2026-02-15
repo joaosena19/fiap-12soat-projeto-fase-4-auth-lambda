@@ -54,8 +54,8 @@ jobs:
           TF_VAR_jwt_key: ${{ secrets.JWT_KEY }}
           TF_VAR_jwt_issuer: ${{ secrets.JWT_ISSUER }}
           TF_VAR_jwt_audience: ${{ secrets.JWT_AUDIENCE }}
-          TF_VAR_api_client_id: ${{ secrets.API_CLIENT_ID }}
-          TF_VAR_api_client_secret: ${{ secrets.API_CLIENT_SECRET }}
+          TF_VAR_infra_terraform_state_bucket: ${{ secrets.TF_VAR_BUCKET_NAME }}
+          TF_VAR_banco_terraform_state_bucket: ${{ secrets.TF_VAR_BUCKET_NAME }}
           TF_VAR_db_password: ${{ secrets.DB_MASTER_PASSWORD }}
           TF_VAR_new_relic_account_id: ${{ secrets.NEW_RELIC_ACCOUNT_ID }}
           TF_VAR_new_relic_license_key: ${{ secrets.NEW_RELIC_LICENSE_KEY }}
