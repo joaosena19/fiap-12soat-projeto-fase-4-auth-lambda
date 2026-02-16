@@ -40,11 +40,6 @@ output "api_gateway_execution_arn" {
   value       = aws_apigatewayv2_api.main.execution_arn
 }
 
-output "vpc_link_id" {
-  description = "ID do VPC Link"
-  value       = aws_apigatewayv2_vpc_link.eks.id
-}
-
 # Outputs do CloudWatch Logs
 output "api_gateway_log_group_name" {
   description = "Nome do CloudWatch Log Group do API Gateway"
