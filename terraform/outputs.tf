@@ -1,26 +1,26 @@
-# Outputs das funções Lambda
+# Outputs das funcoes Lambda
 output "login_lambda_arn" {
-  description = "ARN da função Lambda de Login"
+  description = "ARN da funcao Lambda de Login"
   value       = aws_lambda_function.login.arn
 }
 
 output "login_lambda_name" {
-  description = "Nome da função Lambda de Login"
+  description = "Nome da funcao Lambda de Login"
   value       = aws_lambda_function.login.function_name
 }
 
 output "authorizer_lambda_arn" {
-  description = "ARN da função Lambda Authorizer"
+  description = "ARN da funcao Lambda Authorizer"
   value       = aws_lambda_function.authorizer.arn
 }
 
 output "authorizer_lambda_name" {
-  description = "Nome da função Lambda Authorizer"
+  description = "Nome da funcao Lambda Authorizer"
   value       = aws_lambda_function.authorizer.function_name
 }
 
 output "lambda_execution_role_arn" {
-  description = "ARN da role de execução da Lambda"
+  description = "ARN da role de execucao da Lambda"
   value       = aws_iam_role.lambda_execution_role.arn
 }
 
@@ -36,7 +36,7 @@ output "api_gateway_endpoint" {
 }
 
 output "api_gateway_execution_arn" {
-  description = "ARN de execução do API Gateway"
+  description = "ARN de execucao do API Gateway"
   value       = aws_apigatewayv2_api.main.execution_arn
 }
 

@@ -1,8 +1,8 @@
 # ============================================================================
-# ROTAS PÚBLICAS - Sem autenticação
+# ROTAS PUBLICAS - Sem autenticacao
 # ============================================================================
 
-# Rota de autenticação - Lambda de login
+# Rota de autenticacao - Lambda de login
 resource "aws_apigatewayv2_route" "auth_post" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /auth/authenticate"
@@ -20,7 +20,7 @@ resource "aws_apigatewayv2_route" "webhook_post" {
   depends_on = [aws_apigatewayv2_integration.lambda_login]
 }
 
-# Rota pública - Busca de ordem de serviço sem autenticação
+# Rota publica - Busca de ordem de servico sem autenticacao
 resource "aws_apigatewayv2_route" "ordens_servico_busca_publica" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /api/ordens-servico/busca-publica"
@@ -29,7 +29,7 @@ resource "aws_apigatewayv2_route" "ordens_servico_busca_publica" {
   depends_on = [aws_apigatewayv2_integration.ordemservico]
 }
 
-# Rota pública - Webhook para aprovar orçamento
+# Rota publica - Webhook para aprovar orcamento
 resource "aws_apigatewayv2_route" "ordens_servico_webhook_aprovar" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /api/ordens-servico/orcamento/aprovar/webhook"
@@ -38,7 +38,7 @@ resource "aws_apigatewayv2_route" "ordens_servico_webhook_aprovar" {
   depends_on = [aws_apigatewayv2_integration.ordemservico]
 }
 
-# Rota pública - Webhook para desaprovar orçamento
+# Rota publica - Webhook para desaprovar orcamento
 resource "aws_apigatewayv2_route" "ordens_servico_webhook_desaprovar" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /api/ordens-servico/orcamento/desaprovar/webhook"
@@ -47,7 +47,7 @@ resource "aws_apigatewayv2_route" "ordens_servico_webhook_desaprovar" {
   depends_on = [aws_apigatewayv2_integration.ordemservico]
 }
 
-# Rota pública - Webhook para alterar status
+# Rota publica - Webhook para alterar status
 resource "aws_apigatewayv2_route" "ordens_servico_webhook_status" {
   api_id    = aws_apigatewayv2_api.main.id
   route_key = "POST /api/ordens-servico/status/webhook"
@@ -87,7 +87,7 @@ resource "aws_apigatewayv2_route" "clientes_root" {
   ]
 }
 
-# Rotas de Veículos
+# Rotas de Veiculos
 resource "aws_apigatewayv2_route" "veiculos" {
   api_id             = aws_apigatewayv2_api.main.id
   route_key          = "ANY /api/veiculos/{proxy+}"
@@ -114,7 +114,7 @@ resource "aws_apigatewayv2_route" "veiculos_root" {
   ]
 }
 
-# Rotas de Serviços
+# Rotas de Servicos
 resource "aws_apigatewayv2_route" "servicos" {
   api_id             = aws_apigatewayv2_api.main.id
   route_key          = "ANY /api/servicos/{proxy+}"
@@ -141,7 +141,7 @@ resource "aws_apigatewayv2_route" "servicos_root" {
   ]
 }
 
-# Rotas de Usuários
+# Rotas de Usuarios
 resource "aws_apigatewayv2_route" "usuarios" {
   api_id             = aws_apigatewayv2_api.main.id
   route_key          = "ANY /api/usuarios/{proxy+}"
@@ -200,10 +200,10 @@ resource "aws_apigatewayv2_route" "estoque_root" {
 }
 
 # ============================================================================
-# ROTAS PROTEGIDAS - ORDEM DE SERVIÇO SERVICE
+# ROTAS PROTEGIDAS - ORDEM DE SERVICO SERVICE
 # ============================================================================
 
-# Rotas de Ordens de Serviço
+# Rotas de Ordens de Servico
 resource "aws_apigatewayv2_route" "ordens_servico" {
   api_id             = aws_apigatewayv2_api.main.id
   route_key          = "ANY /api/ordens-servico/{proxy+}"

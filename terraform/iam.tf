@@ -1,4 +1,4 @@
-# Role IAM para execução da Lambda
+# Role IAM para execucao da Lambda
 resource "aws_iam_role" "lambda_execution_role" {
   name = "${var.project_identifier}-lambda-execution-role"
 
@@ -20,13 +20,13 @@ resource "aws_iam_role" "lambda_execution_role" {
   }
 }
 
-# Anexar política básica de execução Lambda
+# Anexar politica basica de execucao Lambda
 resource "aws_iam_role_policy_attachment" "lambda_basic_execution" {
   role       = aws_iam_role.lambda_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-# Anexar política para VPC access
+# Anexar politica para VPC access
 resource "aws_iam_role_policy_attachment" "lambda_vpc_access" {
   role       = aws_iam_role.lambda_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"

@@ -2,13 +2,13 @@
 # VPC LINKS - Conectam API Gateway aos Target Groups do NLB
 # ============================================================================
 #
-# Cada VPC Link conecta o API Gateway a um Target Group específico no NLB.
-# Como NLBs não entendem HTTP paths, criamos múltiplos VPC Links, um para
-# cada microsserviço, e o roteamento por path acontece no API Gateway.
+# Cada VPC Link conecta o API Gateway a um Target Group especifico no NLB.
+# Como NLBs nao entendem HTTP paths, criamos multiplos VPC Links, um para
+# cada microsservico, e o roteamento por path acontece no API Gateway.
 #
 # ============================================================================
 
-# Data source para obter informações da infraestrutura
+# Data source para obter informacoes da infraestrutura
 data "terraform_remote_state" "infra" {
   backend = "s3"
   config = {
@@ -52,7 +52,7 @@ resource "aws_apigatewayv2_vpc_link" "cadastro" {
   }
 }
 
-# Integração API Gateway → Cadastro Listener
+# Integracao API Gateway -> Cadastro Listener
 resource "aws_apigatewayv2_integration" "cadastro" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "HTTP_PROXY"
@@ -78,7 +78,7 @@ resource "aws_apigatewayv2_vpc_link" "estoque" {
   }
 }
 
-# Integração API Gateway → Estoque Listener
+# Integracao API Gateway -> Estoque Listener
 resource "aws_apigatewayv2_integration" "estoque" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "HTTP_PROXY"
@@ -104,7 +104,7 @@ resource "aws_apigatewayv2_vpc_link" "ordemservico" {
   }
 }
 
-# Integração API Gateway → OrdemServico Listener
+# Integracao API Gateway -> OrdemServico Listener
 resource "aws_apigatewayv2_integration" "ordemservico" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "HTTP_PROXY"
