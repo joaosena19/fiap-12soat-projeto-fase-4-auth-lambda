@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "project_identifier" {
   description = "Identificador do projeto para nomeação de recursos"
   type        = string
-  default     = "fiap-12soat-projeto"
+  default     = "fiap-12soat-fase4"
 }
 
 variable "lambda_runtime" {
