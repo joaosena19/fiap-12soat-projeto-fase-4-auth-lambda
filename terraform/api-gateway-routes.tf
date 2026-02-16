@@ -57,6 +57,58 @@ resource "aws_apigatewayv2_route" "ordens_servico_webhook_status" {
 }
 
 # ============================================================================
+# ROTAS PUBLICAS - Swagger UI (sem autenticacao)
+# ============================================================================
+
+resource "aws_apigatewayv2_route" "swagger_cadastro" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /swagger/cadastro/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
+
+  depends_on = [aws_apigatewayv2_integration.cadastro]
+}
+
+resource "aws_apigatewayv2_route" "swagger_cadastro_root" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /swagger/cadastro"
+  target    = "integrations/${aws_apigatewayv2_integration.cadastro.id}"
+
+  depends_on = [aws_apigatewayv2_integration.cadastro]
+}
+
+resource "aws_apigatewayv2_route" "swagger_estoque" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /swagger/estoque/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.estoque.id}"
+
+  depends_on = [aws_apigatewayv2_integration.estoque]
+}
+
+resource "aws_apigatewayv2_route" "swagger_estoque_root" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /swagger/estoque"
+  target    = "integrations/${aws_apigatewayv2_integration.estoque.id}"
+
+  depends_on = [aws_apigatewayv2_integration.estoque]
+}
+
+resource "aws_apigatewayv2_route" "swagger_ordens_servico" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /swagger/ordens-servico/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
+
+  depends_on = [aws_apigatewayv2_integration.ordemservico]
+}
+
+resource "aws_apigatewayv2_route" "swagger_ordens_servico_root" {
+  api_id    = aws_apigatewayv2_api.main.id
+  route_key = "ANY /swagger/ordens-servico"
+  target    = "integrations/${aws_apigatewayv2_integration.ordemservico.id}"
+
+  depends_on = [aws_apigatewayv2_integration.ordemservico]
+}
+
+# ============================================================================
 # ROTAS PROTEGIDAS - CADASTRO SERVICE
 # ============================================================================
 
