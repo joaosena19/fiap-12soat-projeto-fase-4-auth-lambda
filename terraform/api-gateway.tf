@@ -2,7 +2,7 @@
 resource "aws_apigatewayv2_api" "main" {
   name          = "${var.project_identifier}-api-gateway"
   protocol_type = "HTTP"
-  description   = "API Gateway para roteamento entre Lambda (auth) e microserviços (cadastro, estoque, ordem-servico)"
+  description   = "API Gateway para roteamento entre Lambda (auth) e microservicos (cadastro, estoque, ordem-servico)"
 
   cors_configuration {
     allow_origins  = ["*"]
@@ -79,7 +79,7 @@ resource "aws_api_gateway_account" "main" {
   cloudwatch_role_arn = aws_iam_role.api_gateway_logging.arn
 }
 
-# Stage padrão com logs habilitados
+# Stage padrao com logs habilitados
 resource "aws_apigatewayv2_stage" "default" {
   api_id      = aws_apigatewayv2_api.main.id
   name        = "$default"
@@ -113,7 +113,7 @@ resource "aws_apigatewayv2_stage" "default" {
   }
 }
 
-# Permissão para API Gateway invocar a Lambda de Login
+# Permissao para API Gateway invocar a Lambda de Login
 resource "aws_lambda_permission" "api_gateway_login" {
   statement_id  = "AllowAPIGatewayInvokeLogin"
   action        = "lambda:InvokeFunction"
@@ -122,7 +122,7 @@ resource "aws_lambda_permission" "api_gateway_login" {
   source_arn    = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
 }
 
-# Permissão para API Gateway invocar a Lambda Authorizer
+# Permissao para API Gateway invocar a Lambda Authorizer
 resource "aws_lambda_permission" "api_gateway_authorizer" {
   statement_id  = "AllowAPIGatewayInvokeAuthorizer"
   action        = "lambda:InvokeFunction"
@@ -131,7 +131,7 @@ resource "aws_lambda_permission" "api_gateway_authorizer" {
   source_arn    = "${aws_apigatewayv2_api.main.execution_arn}/authorizers/*"
 }
 
-# Integração com Lambda de Login
+# Integracao com Lambda de Login
 resource "aws_apigatewayv2_integration" "lambda_login" {
   api_id                 = aws_apigatewayv2_api.main.id
   integration_type       = "AWS_PROXY"

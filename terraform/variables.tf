@@ -1,35 +1,35 @@
 variable "aws_region" {
-  description = "AWS region onde os recursos serão criados"
+  description = "AWS region onde os recursos serao criados"
   type        = string
   default     = "us-east-1"
 }
 
 variable "project_identifier" {
-  description = "Identificador do projeto para nomeação de recursos"
+  description = "Identificador do projeto para nomeacao de recursos"
   type        = string
   default     = "fiap-12soat-fase4"
 }
 
 variable "lambda_runtime" {
-  description = "Runtime da função Lambda"
+  description = "Runtime da funcao Lambda"
   type        = string
   default     = "dotnet8"
 }
 
 variable "lambda_timeout" {
-  description = "Timeout da função Lambda em segundos"
+  description = "Timeout da funcao Lambda em segundos"
   type        = number
   default     = 30
 }
 
 variable "lambda_memory_size" {
-  description = "Memória alocada para a função Lambda em MB"
+  description = "Memoria alocada para a funcao Lambda em MB"
   type        = number
   default     = 512
 }
 
 variable "jwt_key" {
-  description = "Chave secreta para geração de tokens JWT"
+  description = "Chave secreta para geracao de tokens JWT"
   type        = string
   sensitive   = true
 }
@@ -46,16 +46,16 @@ variable "jwt_audience" {
   default     = "AuthorizedServices"
 }
 
-# Variáveis para remote state da infraestrutura
+# Variaveis para remote state da infraestrutura
 variable "infra_terraform_state_bucket" {
-  description = "Nome do bucket S3 onde está o state da infraestrutura"
+  description = "Nome do bucket S3 onde esta o state da infraestrutura"
   type        = string
   default     = "fiap-12soat-fase4-joao-dainese"
 }
 
-# Variáveis para remote state do banco
+# Variaveis para remote state do banco
 variable "banco_terraform_state_bucket" {
-  description = "Nome do bucket S3 onde está o state do banco"
+  description = "Nome do bucket S3 onde esta o state do banco"
   type        = string
   default     = "fiap-12soat-fase4-joao-dainese"
 }
@@ -74,7 +74,7 @@ variable "new_relic_account_id" {
 }
 
 variable "new_relic_license_key" {
-  description = "Chave de licença do New Relic (Ingest License)"
+  description = "Chave de licenca do New Relic (Ingest License)"
   type        = string
   sensitive   = true
 }

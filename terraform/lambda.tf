@@ -1,4 +1,4 @@
-# Data source para obter informações do banco de Cadastros (que contém usuarios, roles, clientes)
+# Data source para obter informacoes do banco de Cadastros (que contem usuarios, roles, clientes)
 data "terraform_remote_state" "cadastro_db" {
   backend = "s3"
   config = {
@@ -43,14 +43,14 @@ resource "aws_security_group" "lambda_sg" {
   }
 }
 
-# Fonte de dados para criar arquivo zip do código da Lambda
+# Fonte de dados para criar arquivo zip do codigo da Lambda
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_dir  = "${path.module}/../src/AuthLambda/bin/Release/net8.0/publish"
   output_path = "${path.module}/lambda_function.zip"
 }
 
-# Lambda Function para Login (geração de tokens)
+# Lambda Function para Login (geracao de tokens)
 resource "aws_lambda_function" "login" {
   filename         = data.archive_file.lambda_zip.output_path
   function_name    = "${var.project_identifier}-login-lambda"
@@ -66,7 +66,7 @@ resource "aws_lambda_function" "login" {
     "arn:aws:lambda:us-east-1:451483290750:layer:NewRelicLambdaExtension:37"
   ]
 
-  # Configuração VPC para acessar RDS
+  # Configuracao VPC para acessar RDS
   vpc_config {
     subnet_ids         = data.terraform_remote_state.infra.outputs.subnet_publica_ids
     security_group_ids = [aws_security_group.lambda_sg.id]
@@ -98,7 +98,7 @@ resource "aws_lambda_function" "login" {
   depends_on = [aws_iam_role_policy_attachment.lambda_vpc_access]
 }
 
-# Lambda Function para Authorizer (validação de tokens)
+# Lambda Function para Authorizer (validacao de tokens)
 resource "aws_lambda_function" "authorizer" {
   filename         = data.archive_file.lambda_zip.output_path
   function_name    = "${var.project_identifier}-authorizer-lambda"
