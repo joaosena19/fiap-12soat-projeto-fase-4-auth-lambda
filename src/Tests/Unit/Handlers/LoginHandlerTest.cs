@@ -13,6 +13,7 @@ namespace Tests.Unit.Handlers;
 public class LoginHandlerTest
 {
     private readonly LoginHandlerTestFixture _fixture = new();
+    private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
     [Fact(DisplayName = "FunctionHandler deve retornar 400 quando Body for nulo")]
     [Trait("Handler", "LoginHandler")]
@@ -222,8 +223,7 @@ public class LoginHandlerTest
         response.Headers.Should().ContainKey("Content-Type");
         response.Headers["Content-Type"].Should().Be("application/json");
         
-        var resultTokenResponse = JsonSerializer.Deserialize<TokenResponseDto>(response.Body,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var resultTokenResponse = JsonSerializer.Deserialize<TokenResponseDto>(response.Body, JsonOptions);
         
         resultTokenResponse.Should().NotBeNull();
         resultTokenResponse!.Token.Should().NotBeNullOrEmpty();

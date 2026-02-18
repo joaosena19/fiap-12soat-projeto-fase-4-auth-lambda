@@ -8,7 +8,6 @@ namespace Tests.SharedHelpers.Fixtures;
 
 public class AuthenticationServiceTestFixture
 {
-    public Mock<IConfiguration> ConfigurationMock { get; }
     public Mock<ITokenService> TokenServiceMock { get; }
     public Mock<IUsuarioGateway> UsuarioGatewayMock { get; }
     public Mock<IPasswordHasher> PasswordHasherMock { get; }
@@ -16,11 +15,10 @@ public class AuthenticationServiceTestFixture
 
     public AuthenticationServiceTestFixture()
     {
-        ConfigurationMock = new Mock<IConfiguration>();
         TokenServiceMock = new Mock<ITokenService>();
         UsuarioGatewayMock = new Mock<IUsuarioGateway>();
         PasswordHasherMock = new Mock<IPasswordHasher>();
 
-        AuthenticationService = new AuthenticationService(ConfigurationMock.Object, TokenServiceMock.Object, UsuarioGatewayMock.Object, PasswordHasherMock.Object);
+        AuthenticationService = new AuthenticationService(TokenServiceMock.Object, UsuarioGatewayMock.Object, PasswordHasherMock.Object);
     }
 }

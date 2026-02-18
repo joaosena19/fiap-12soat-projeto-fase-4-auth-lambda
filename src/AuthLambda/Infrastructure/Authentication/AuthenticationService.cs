@@ -8,14 +8,12 @@ namespace Infrastructure.Authentication
 {
     public class AuthenticationService : IAuthenticationService
     {
-        private readonly IConfiguration _configuration;
         private readonly ITokenService _tokenService;
         private readonly IUsuarioGateway _usuarioGateway;
         private readonly IPasswordHasher _passwordHasher;
 
-        public AuthenticationService(IConfiguration configuration, ITokenService tokenService, IUsuarioGateway usuarioGateway, IPasswordHasher passwordHasher)
+        public AuthenticationService(ITokenService tokenService, IUsuarioGateway usuarioGateway, IPasswordHasher passwordHasher)
         {
-            _configuration = configuration;
             _tokenService = tokenService;
             _usuarioGateway = usuarioGateway;
             _passwordHasher = passwordHasher;
