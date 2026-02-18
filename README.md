@@ -32,4 +32,4 @@ Funções AWS Lambda para autenticação: login (geração de JWT) e authorizer 
 
 ## Autenticação
 
-Para entender o fluxo completo de autenticação e autorização, consulte: [Autenticação](https://github.com/joaosena19/fiap-12soat-projeto-fase-4-documentacao/blob/main/4.%20Autenticação/1_autenticacao.md)
+Para entender o fluxo completo de autenticação e autorização, consulte: [Autenticação](https://github.com/joaosena19/fiap-12soat-projeto-fase-4-documentacao/blob/main/04.%20Autentica%C3%A7%C3%A3o/1_autenticacao.md)
