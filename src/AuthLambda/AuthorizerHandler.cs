@@ -44,22 +44,11 @@ public class AuthorizerHandler
         try
         {
             // Para HTTP API v2, o token vem em request.Headers["authorization"] ou request.Headers["Authorization"]
-            var authHeader = request.Headers?.ContainsKey("authorization") == true 
-                ? request.Headers["authorization"] 
-                : request.Headers?.ContainsKey("Authorization") == true 
-                    ? request.Headers["Authorization"] 
-                    : null;
+            string? authHeader = null;
+            if (request.Headers?.TryGetValue("authorization", out authHeader) != true)
+                request.Headers?.TryGetValue("Authorization", out authHeader);
             
             context.Logger.LogInformation($"Authorization header recebido: {(authHeader != null ? "[PRESENTE]" : "[AUSENTE]")}");
-            
-            // Debug: Log do header completo (mascarado)
-            if (authHeader != null)
-            {
-                var maskedHeader = authHeader.Length > 20 
-                    ? authHeader.Substring(0, 20) + "..." 
-                    : authHeader;
-                context.Logger.LogInformation($"Header value (primeiros 20 chars): {maskedHeader}");
-            }
             
             var token = ExtractToken(authHeader);
             if (string.IsNullOrEmpty(token))
@@ -70,12 +59,6 @@ public class AuthorizerHandler
                     ["isAuthorized"] = false
                 };
             }
-
-            // Debug: Log do token extraído (mascarado)
-            var maskedToken = token.Length > 20 
-                ? token.Substring(0, 20) + "..." 
-                : token;
-            context.Logger.LogInformation($"Token extraído (primeiros 20 chars): {maskedToken}");
 
             var claimsPrincipal = ValidateToken(token);
             var userId = claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value 
@@ -107,7 +90,7 @@ public class AuthorizerHandler
         }
     }
 
-    private string? ExtractToken(string? authorizationHeader)
+    private static string? ExtractToken(string? authorizationHeader)
     {
         if (string.IsNullOrEmpty(authorizationHeader))
             return null;
@@ -145,7 +128,7 @@ public class AuthorizerHandler
             ClockSkew = TimeSpan.FromMinutes(5)
         };
 
-        var principal = _tokenHandler.ValidateToken(token, validationParameters, out SecurityToken validatedToken);
+        var principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
         return principal;
     }
 }
